@@ -1,0 +1,1 @@
+This repository contains routines for fast identification of list of targets contained within specified neighborhood of a given collection of sources. The results are returned in a row sparse compressed format.
