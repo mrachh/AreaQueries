@@ -29,11 +29,11 @@ Writes out the following:
 
   `nnz` (written by `findnearmem2d`) : total number of target-ball pairs found  
   `row_ptr` : length-`(nt+1)` list of start indices in `col_ind` array for each target  
-  `col_ind` : length-`nnz` list of source indices within their respective radii of each target  
+  `col_ind` : length-`nnz` list of source ball indices intersecting each target  
 
 This may be interpreted as the CSR storage of a `nt`-by-`ns`
 sparse matrix with `nnz` nonzero entries.
-The element `(i,j)` is nonzero when target `i` is within ball `j`, ie,
+The element `(i,j)` is nonzero iff target `i` is within ball `j`, ie,
 within distance `r(j)` of source `j`.
 
 The task performed may be also understood by reading the naive codes
