@@ -9,8 +9,6 @@ compressed sparse row (CSR) format, ie, indices of balls that contain
 each target. The algorithm used a hung pruned level-restricted
 adaptive quad-tree in 2D (or oct-tree in 3D), with OpenMP parallelization.
 
-Docs by Alex Barnett, Flatiron Institute.
-
 ### Example
 
 We present the 2D case (3D is analogous). Given inputs:

@@ -10,7 +10,7 @@ c     methods are compared.
       integer, allocatable :: isort(:),wsort(:),isort2(:),wsort2(:)
 c     for timing
       integer crate,t1,t2,t3
-      real *8 t,ts
+      real *8 tm,tms,t,ts
       
       call prini(6,13)
 
@@ -26,7 +26,7 @@ c     ball centers in unit square with random radii
       do i=1,ns
         src(1,i) = hkrand(0)
         src(2,i) = hkrand(0)
-        rads(i) = 2.0d0**(-10*hkrand(0))/100.0d0
+        rads(i) = 2.0d0**(-10*hkrand(0))/50.0d0
       enddo
 
       do i=1,nt
@@ -39,14 +39,14 @@ c     ball centers in unit square with random radii
       call system_clock(t1)
       call findnearslowmem2d(src,ns,rads,targ,nt,nnz2)
       call system_clock(t2,crate)
-      ts = (t2-t1)/float(crate)
+      tms = (t2-t1)/float(crate)
       call findnearmem2d(src,ns,rads,targ,nt,nnz)
       call system_clock(t3)
-      t = (t3-t2)/float(crate)
+      tm = (t3-t2)/float(crate)
       
       print *,'ns=',ns,' nt=',nt,' nnz=',nnz,' nnz/nt=',float(nnz)/nt
       print '("tmem slow:  ",f6.3," sec,  tmem fast:  ",f6.3," sec")',
-     1    ts,t
+     1    tms,tm
 
       
       if(nnz.ne.nnz2) then
@@ -64,6 +64,7 @@ c     ball centers in unit square with random radii
       t = (t3-t2)/float(crate)
       print '("tfind slow: ",f6.3," sec,  tfind fast: ",f6.3," sec")',
      1    ts,t
+      print *,"speedup factor: ",(tms+ts)/(tm+t)
       
       do i=1,nt
         n1 = row_ptr(i+1)-row_ptr(i)
