@@ -34,19 +34,25 @@ sparse matrix with `nnz` nonzero entries.
 The element `(i,j)` is nonzero iff target `i` is within ball `j`, ie,
 within distance `r(j)` of source `j`.
 
-The task performed may be also understood by reading the naive codes
-`findnearslowmem2d` and `findnearslow2d`.
+The precise task performed may be also understood by reading the naive source
+subroutines `findnearslowmem2d` and `findnearslow2d`.
+
+Note: the call is split into two routines so that the user may handle the
+memory management for the potentially-large `col_ind` array.
 
 
 ### Contents of package
 
 `src/2d` : 2D source code  
 `src/3d` : 3D source code  
-`src/common` : sparse matrix format conversions, low-level utilities including by other authors  
+`src/common` : sparse matrix format conversion, low-level utilities including by other authors  
 `test` : test drivers and makefiles  
 
-### Testing
+### Requirements and testing
 
+You need a fortran compiler and GNU make.
+For non-linux systems please see the makefile and edit the HOST var.
+Then:
 ```
 cd test
 ./testall.sh

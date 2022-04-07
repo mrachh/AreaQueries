@@ -12,14 +12,14 @@ endif
 
 ifeq ($(HOST),linux-gfortran)
 FC = gfortran
-FFLAGS = -O3 -march=native -funroll-loops -ftree-vectorize -ffast-math -c -w  
+FFLAGS = -O3 -march=native -funroll-loops -ftree-vectorize -ffast-math -c -w -std=legacy
 FLINK = gfortran -w -o $(EXEC) 
 FEND = -lblas -llapack
 endif
 
 ifeq ($(HOST),linux-gfortran-openmp)
 FC = gfortran
-FFLAGS = -O3 -march=native -funroll-loops -ftree-vectorize -ffast-math --openmp -c -w  
+FFLAGS = -O3 -march=native -funroll-loops -ftree-vectorize -ffast-math --openmp -c -w -std=legacy
 FLINK = gfortran --openmp -w -o $(EXEC) 
 FEND = -lblas -llapack
 endif
