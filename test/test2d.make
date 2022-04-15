@@ -1,8 +1,6 @@
-
-EXEC = int2
-
+# user choose platform...
 #HOST = osx
-HOST=linux-gfortran
+#HOST=linux-gfortran
 HOST=linux-gfortran-openmp
 
 ifeq ($(HOST),osx)
@@ -14,15 +12,15 @@ endif
 
 ifeq ($(HOST),linux-gfortran)
 FC = gfortran
-FFLAGS = -O3 -march=native -funroll-loops -ftree-vectorize -ffast-math -c -w  
-FLINK = gfortran -w -o $(EXEC) 
+FFLAGS = -O3 -march=native -funroll-loops -ftree-vectorize -ffast-math -c -w -std=legacy
+FLINK = gfortran -w -o $(EXEC)
 FEND = -lblas -llapack
 endif
 
 ifeq ($(HOST),linux-gfortran-openmp)
 FC = gfortran
-FFLAGS = -O3 -march=native -funroll-loops -ftree-vectorize -ffast-math --openmp -c -w  
-FLINK = gfortran --openmp -w -o $(EXEC) 
+FFLAGS = -O3 -march=native -funroll-loops -ftree-vectorize -ffast-math --openmp -c -w -std=legacy
+FLINK = gfortran --openmp -w -o $(EXEC)
 FEND = -lblas -llapack
 endif
 
@@ -53,6 +51,7 @@ SOURCES += $(HELLSKITCHEN)/Common/second-r8.f
 endif
 
 OBJECTS = $(patsubst %.f,%.o,$(patsubst %.f90,%.o,$(SOURCES)))
+EXEC = test2d
 
 #
 # use only the file part of the filename, then manually specify
@@ -65,10 +64,13 @@ OBJECTS = $(patsubst %.f,%.o,$(patsubst %.f90,%.o,$(SOURCES)))
 %.o : %.f90
 	$(FC) $(FFLAGS) $< -o $@
 
-all: $(OBJECTS)
-	rm -f $(EXEC)
+default: run
+
+run: $(EXEC)
+	./$(EXEC)
+
+$(EXEC): $(OBJECTS)
 	$(FLINK) $(OBJECTS) $(FEND)
-	./$(EXEC) 2 
 
 clean:
 	rm -f $(OBJECTS)
