@@ -17,6 +17,7 @@ c     for timing
 
       ns = 10001
       nt = 50000
+      ndt = 3
       
       allocate(src(3,ns),targ(3,nt),rads(ns))
       allocate(row_ptr(nt+1),row_ptr2(nt+1))
@@ -39,10 +40,10 @@ c     ball centers in unit square with random radii
       nnz = 0
       nnz2 = 0
       call system_clock(t1)
-      call findnearslowmem3d(src,ns,rads,targ,nt,nnz2)
+      call findnearslowmem3d(src,ns,rads,ndt,targ,nt,nnz2)
       call system_clock(t2,crate)
       tms = (t2-t1)/float(crate)
-      call findnearmem3d(src,ns,rads,targ,nt,nnz)
+      call findnearmem3d(src,ns,rads,ndt,targ,nt,nnz)
       call system_clock(t3)
       tm = (t3-t2)/float(crate)
       
@@ -58,10 +59,10 @@ c     ball centers in unit square with random radii
 
       allocate(col_ind(nnz),col_ind2(nnz))
       call system_clock(t1)
-      call findnearslow3d(src,ns,rads,targ,nt,row_ptr2,col_ind2)
+      call findnearslow3d(src,ns,rads,ndt,targ,nt,row_ptr2,col_ind2)
       call system_clock(t2,crate)
       ts = (t2-t1)/float(crate)
-      call findnear3d(src,ns,rads,targ,nt,row_ptr,col_ind)
+      call findnear3d(src,ns,rads,ndt,targ,nt,row_ptr,col_ind)
       call system_clock(t3)
       t = (t3-t2)/float(crate)
       print '("tfind slow: ",f6.3," sec,  tfind fast: ",f6.3," sec")',

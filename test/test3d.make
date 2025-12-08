@@ -1,13 +1,21 @@
 # user choose platform...
-#HOST = osx
+#HOST=osx
+HOST=osx-openmp
 #HOST=linux-gfortran
-HOST=linux-gfortran-openmp
+#HOST=linux-gfortran-openmp
 
 ifeq ($(HOST),osx)
 FC = gfortran
-FFLAGS = -O3 -march=native -funroll-loops -c -w
+FFLAGS = -O3 -march=native -std=legacy -funroll-loops -c -w
 FLINK = gfortran -w -o $(EXEC)
 FEND = -framework accelerate
+endif
+
+ifeq ($(HOST),osx-openmp)
+FC = gfortran
+FFLAGS = -O3 -march=native -std=legacy -funroll-loops -c -w -fopenmp
+FLINK = gfortran -w -o $(EXEC)
+FEND = -framework accelerate -lgomp
 endif
 
 ifeq ($(HOST),linux-gfortran)
@@ -41,9 +49,12 @@ COM = ../src/common
 SOURCES =  test3d.f \
   $(COM)/prini_new.f \
   $(COM)/hkrand.f \
+  $(COM)/cumsum.f \
   $(COM)/sort.f \
+  $(COM)/sparse_reps.f \
   $(3D)/findnear3d.f \
-  $(3D)/tree_lr_3d.f \
+  $(3D)/pts_tree3d.f \
+  $(3D)/tree_routs3d.f \
   $(COM)/dlaran.f 
 
 ifeq ($(WITH_SECOND),1)
