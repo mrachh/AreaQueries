@@ -39,7 +39,7 @@ COM = ../src/common
 .PHONY: all clean list
 
 SOURCES =  test2d.f \
-  $(COM)/prini_new.f \
+  $(COM)/prini.f \
   $(COM)/hkrand.f \
   $(COM)/sort.f \
   $(2D)/findnear2d.f \

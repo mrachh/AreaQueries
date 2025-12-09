@@ -47,7 +47,7 @@ COM = ../src/common
 .PHONY: all clean list
 
 SOURCES =  test3d.f \
-  $(COM)/prini_new.f \
+  $(COM)/prini.f \
   $(COM)/hkrand.f \
   $(COM)/cumsum.f \
   $(COM)/sort.f \

@@ -508,7 +508,7 @@ c     Reset nlevels, nboxes
       enddo
 
 c     compute colleagues
-      call computecoll(nlevels,nboxes,laddr, boxsize,
+      call computecoll2d(nlevels,nboxes,laddr, boxsize,
      1                   centers,iparenttemp,nchild,
      2                   ichildtemp,nnbors,nbors)
 c      call prinf('nboxes=*',nboxes,1)
@@ -569,7 +569,7 @@ c      call prinf('nboxes=*',nboxes,1)
             ihunglistsrc(j,i) = -1
          enddo
       enddo
-      call computelists(nlevels,nboxes,laddr,boxsize,centers,
+      call computelists2d(nlevels,nboxes,laddr,boxsize,centers,
      1                  iparenttemp,nchild,ichildtemp,nnbors,
      2                  nbors,mnlist1,nlist1,list1,mnlist2,nlist2,
      3                  list2,mnlist3,nlist3,list3,mnlist4,
@@ -577,7 +577,7 @@ c      call prinf('nboxes=*',nboxes,1)
 
 c     Compute hunglist  
       if(mhung.gt.0) then
-         call computehunglist(mhung,nlevels,nboxes,laddr,
+         call computehunglist2d(mhung,nlevels,nboxes,laddr,
      1                        ns,isourcetemp,iparenttemp,nchild,
      2                        ihsfirsttemp,ihslasttemp,
      3                        nnbors,nbors,mnlist1,nlist1,
@@ -1191,7 +1191,7 @@ c                 Check if further refinement required
       end
 c-------------------------------------------------------------      
 
-      subroutine computecoll(nlevels,nboxes,laddr,boxsize,
+      subroutine computecoll2d(nlevels,nboxes,laddr,boxsize,
      1                       centers,iparent,nchild,ichild,
      2                       nnbors,nbors)
 
@@ -1622,7 +1622,7 @@ c     Compute colleague information again
             nbors(j,i) = -1
          enddo
       enddo
-      call computecoll(nlevels,nboxes,laddr, boxsize,
+      call computecoll2d(nlevels,nboxes,laddr, boxsize,
      1                   centers,iparent,nchild,
      2                   ichild,nnbors,nbors)
 
@@ -1660,10 +1660,10 @@ c     further division. In the even a flag++ box needs
 c     further subdivision then flag the box with iflag(box) = 1
 c     This will again ensure that the subdivide_flag routine
 c     will take care of handling the flag++ case
-         call updateflags(ilev,nboxes,nlevels,laddr,nchild,ichild,
+         call updateflags2d(ilev,nboxes,nlevels,laddr,nchild,ichild,
      1                    nnbors,nbors,centers,boxsize,iflag)
 
-         call updateflags(ilev,nboxes,nlevels,laddrtail,nchild,ichild,
+         call updateflags2d(ilev,nboxes,nlevels,laddrtail,nchild,ichild,
      1                    nnbors,nbors,centers,boxsize,iflag)
 
 
@@ -1743,7 +1743,7 @@ c     Compute colleague information again
             nbors(j,i) = -1
          enddo
       enddo
-      call computecoll(nlevels,nboxes,laddr, boxsize,
+      call computecoll2d(nlevels,nboxes,laddr, boxsize,
      1                   centers,iparent,nchild,
      2                   ichild,nnbors,nbors)
       
@@ -2344,8 +2344,8 @@ c     using the mapping iboxtocurbox
       return
       end
 c--------------------------------------------------------------------
-      subroutine updateflags(curlev,nboxes,nlevels,laddr,nchild,ichild,
-     1                    nnbors,nbors,centers,boxsize,iflag)
+      subroutine updateflags2d(curlev,nboxes,nlevels,laddr,nchild,
+     1    ichild,nnbors,nbors,centers,boxsize,iflag)
 
 c      This subroutine is to check the boxes flagged as flag++
 c      and determine which of the boxes need refinement. The flag
@@ -2451,7 +2451,7 @@ c     End of looping over boxes at the current level
       end
 c-----------------------------------------------------------------
 
-      subroutine computelists(nlevels,nboxes,laddr,boxsize,
+      subroutine computelists2d(nlevels,nboxes,laddr,boxsize,
      1            centers,iparent,nchild,ichild,nnbors,nbors,
      2            mnlist1,nlist1,list1,
      3            mnlist2,nlist2,list2,
@@ -2668,7 +2668,7 @@ c     End of looping over levels
       end
 c------------------------------------------------------------------
 
-      subroutine computemhung(nlevels,nboxes,laddr,iparent,nchild,
+      subroutine computemhung2d(nlevels,nboxes,laddr,iparent,nchild,
      1                        nnbors,nbors,mnlist1,nlist1,list1,
      2                        nhungsrc,nhunglistsrc,mhung)    
 c     This subroutine computes mhung for a given tree 
@@ -2774,7 +2774,7 @@ c     initialize for level 0
       return
       end
 c------------------------------------------------------------------
-      subroutine computehunglist(mhung,nlevels,nboxes,laddr,ns,
+      subroutine computehunglist2d(mhung,nlevels,nboxes,laddr,ns,
      1           isource,iparent,nchild,ihsfirst,ihslast,nnbors,nbors,
      2           mnlist1,nlist1,list1,
      3           nhungsrc,nhunglistsrc,ihunglistsrc)
@@ -3432,7 +3432,7 @@ c     Set up computation of list1 and list2
       enddo
 
 c     compute colleagues
-      call computecoll(nlevels,nboxes,laddr, boxsize,
+      call computecoll2d(nlevels,nboxes,laddr, boxsize,
      1                   centers,iparenttemp,nchild,
      2                   ichildtemp,nnbors,nbors)
 
@@ -3495,13 +3495,13 @@ c     compute colleagues
          enddo
       enddo
 
-      call computelists(nlevels,nboxes,laddr,boxsize,centers,
+      call computelists2d(nlevels,nboxes,laddr,boxsize,centers,
      1                  iparenttemp,nchild,ichildtemp,nnbors,
      2                  nbors,mnlist1,nlist1,list1,mnlist2,nlist2,
      3                  list2,mnlist3,nlist3,list3,mnlist4,
      4                  nlist4,list4)
 
-       call computemhung(nlevels,nboxes,laddr,iparenttemp,nchild,
+       call computemhung2d(nlevels,nboxes,laddr,iparenttemp,nchild,
      1                   nnbors,nbors,mnlist1,nlist1,list1,
      2                   nhungsrc,nhunglistsrc,mhung)
       ltree = (88+mhung)*nboxes + 2*(nlevels+1) + ns+nexpc+nt

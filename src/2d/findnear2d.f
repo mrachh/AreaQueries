@@ -203,6 +203,128 @@ c-------------------------------
 
        implicit real *8 (a-h,o-z)
        real *8 xyzs(2,ns),rads(ns),targets(2,nt)
+
+       idivflag = 0
+       ndiv = 2
+
+       call findnearmem2d_tparams(xyzs, ns, rads, targets, nt, 
+     1    idivflag, ndiv, nnz) 
+
+       return
+       end
+c
+c
+c
+c
+c
+c-----------------------------------------------------
+      subroutine findnear2d(xyzs,ns,rads,targets,nt,row_ptr,
+     1       col_ind) 
+c     
+cc      identify all sources which are contained in 
+c       |xyzs(:,i)-targets(:,j)|<=rads(i).
+c       We use hung lists to identify a nearly minimal set of
+c       sources to loop over relevant for each target.
+c       
+c
+c       Calling sequence variables
+c
+c       xyzs    in: real *8 (2,ns)
+c               location of the sources
+c
+c       ns      in: integer
+c               number of sources
+c
+c       rads    in: real *8(ns)
+c               radii associated with the sources
+c
+c       targets in: real *8(2,nt)
+c               location of the targets
+c
+c       nt      in: integer
+c               number of targets
+c
+c       row_ptr    out: integer(nt+1)
+c                row_ptr(i) is the starting point in the col_ind
+c                array for the list of sources
+c                relevant for target i
+c
+c       col_ind     out: integer(nnz) (nnz is computed using
+c                                      findnearmem)
+c                col_ind(row_ptr(i):row_ptr(i+1)-1) is the list
+c                of sources which satisfy
+c                d(s_{j},t_{i}) <= rs_{j}
+c               
+c               
+c-------------------------------
+       implicit real *8 (a-h,o-z)
+       real *8 xyzs(2,*),rads(*),targets(2,*)
+       integer row_ptr(*),col_ind(*)
+
+       idivflag = 0
+       ndiv = 2
+       call findnear2d_tparams(xyzs, ns, rads, targets, nt, idivflag,
+     1    ndiv, row_ptr, col_ind)
+
+       return
+       end
+c
+c
+c
+c
+c------------------------------------------------------------------      
+      subroutine findnearmem2d_tparams(xyzs,ns,rads,targets,nt,
+     1    idivflag, ndiv, nnz)
+c
+cc      identify all sources which are contained in 
+c       |xyzs(:,i)-targets(:,j)|<=rads(i).
+c       We use hung lists to identify a nearly minimal set of
+c       sources to loop over relevant for each target.
+c
+c       This is a memory management routine for findnearmem
+c       
+c
+c       Calling sequence variables
+c
+c       xyzs    in: real *8 (2,ns)
+c               location of the sources
+c
+c       ns      in: integer
+c               number of sources
+c
+c       rads    in: real *8(ns)
+c               radii associated with the sources
+c
+c       targets in: real *8(2,nt)
+c               location of the targets
+c
+c       nt      in: integer
+c               number of targets
+c
+c       radt    in: real *8(ns)
+c               radii associated with the targets
+c
+c       targets in: real *8(2,nt)
+c               location of the targets
+c
+c       nt      in: integer
+c               number of targets
+c       idivflag in:integer
+c        subdivision criterion
+c          * divflag = 0 -> subdivide on sources only
+c          * idivflag = 1 -> subdivide on targets only
+c          * idivflag = 2 -> subdivide on max(sources+targets)
+c       ndiv    in: integer
+c                 max number of points in leaf box
+c       OUTPUT
+c       nnz     out: integer
+c               number of elements in the flag array
+c
+c               
+c-------------------------------
+
+       implicit real *8 (a-h,o-z)
+       real *8 xyzs(2,ns),rads(ns),targets(2,nt)
        real *8 xtmp(2)
        real *8, allocatable :: rstmp(:)
 
@@ -231,8 +353,6 @@ c
        rttmp = 0
 
 
-       idivflag = 0
-       ndiv = 2
        isep = 1
        nlmax = 200
        nbmax = 0
@@ -312,8 +432,8 @@ c
 c
 c
 c-----------------------------------------------------
-      subroutine findnear2d(xyzs,ns,rads,targets,nt,row_ptr,
-     1       col_ind) 
+      subroutine findnear2d_tparams(xyzs,ns,rads,targets,nt,
+     1       idivflag, ndiv, row_ptr, col_ind) 
 c     
 cc      identify all sources which are contained in 
 c       |xyzs(:,i)-targets(:,j)|<=rads(i).
@@ -337,7 +457,13 @@ c               location of the targets
 c
 c       nt      in: integer
 c               number of targets
-c
+c       idivflag in:integer
+c        subdivision criterion
+c          * divflag = 0 -> subdivide on sources only
+c          * idivflag = 1 -> subdivide on targets only
+c          * idivflag = 2 -> subdivide on max(sources+targets)
+c       ndiv    in: integer
+c                 max number of points in leaf box
 c       row_ptr    out: integer(nt+1)
 c                row_ptr(i) is the starting point in the col_ind
 c                array for the list of sources
@@ -373,10 +499,6 @@ c
 
        rttmp = 0.0d0
 
-
-
-       idivflag = 0
-       ndiv = 2
        isep = 1
        nlmax = 200
        nbmax = 0
